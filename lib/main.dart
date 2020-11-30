@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_exemplos/pages/icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /*
@@ -28,7 +29,7 @@ class App extends StatelessWidget {
       ),
     );
     return MaterialApp(
-      home: HomePage(),
+      home: IconsPage(),
     );
   }
 }

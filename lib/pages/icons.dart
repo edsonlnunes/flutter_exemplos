@@ -20,7 +20,7 @@ class _IconsPageState extends State<IconsPage> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: buildIconV2(10),
+            children: buildIconV2(5),
           ),
           SizedBox(
             height: 10,
@@ -85,9 +85,9 @@ class _IconsPageState extends State<IconsPage> {
       widgets.add(
         InkWell(
           onTap: () {
-            _stars = i;
+            // _stars = _stars == i ? 0 : i; // default
 
-            _stars = _stars == 1 && preenchida ? 0 : _stars;
+            _stars = i == 1 && preenchida && _stars == 1 ? 0 : i;
 
             setState(
               () {},
