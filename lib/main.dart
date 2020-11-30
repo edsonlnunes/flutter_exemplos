@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_exemplos/pages/icons.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 /*
   Crie uma aplicação Flutter que atenda os requisitos abaixo:
@@ -29,7 +27,7 @@ class App extends StatelessWidget {
       ),
     );
     return MaterialApp(
-      home: IconsPage(),
+      home: HomePage(),
     );
   }
 }
@@ -39,43 +37,57 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        width: 300,
-        height: 300,
-        // color: Colors.amber,
-        child: Center(
-          child: Stack(
-            overflow: Overflow.clip,
+      body: Stack(
+        children: [
+          Column(
             children: [
-              Container(
-                height: 150,
-                width: 180,
-                color: Colors.red,
+              Expanded(
+                child: Container(
+                  color: Colors.red,
+                ),
               ),
-              Container(
-                height: 120,
-                width: 130,
-                color: Colors.green,
-              ),
-              Container(
-                height: 80,
-                width: 90,
-                color: Colors.yellow,
-              ),
-              Positioned(
-                bottom: 20,
-                right: 20,
-                child: Text(
-                  'posicioned com um testo mto grande',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                  ),
+              Expanded(
+                child: Container(
+                  color: Colors.green,
                 ),
               ),
             ],
           ),
-        ),
+          Center(
+            child: Container(
+              width: 250,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+                gradient: LinearGradient(
+                  end: AlignmentDirectional.topCenter,
+                  begin: AlignmentDirectional.bottomCenter,
+                  colors: [
+                    Colors.red,
+                    Colors.green,
+                  ],
+                ),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {},
+                  borderRadius: BorderRadius.circular(25),
+                  child: Center(
+                    child: Text(
+                      'Clique Aqui',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
