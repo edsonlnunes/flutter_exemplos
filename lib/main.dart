@@ -1,5 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_exemplos/pages/atividades/login.dart';
+import 'package:flutter_exemplos/pages/atividades/nubank.dart';
+import 'package:flutter_exemplos/pages/icons.dart';
+import 'package:flutter_exemplos/pages/meio_a_meio.dart';
+import 'package:flutter_exemplos/pages/teste.dart';
 
 /*
   Crie uma aplicação Flutter que atenda os requisitos abaixo:
@@ -27,7 +33,7 @@ class App extends StatelessWidget {
       ),
     );
     return MaterialApp(
-      home: HomePage(),
+      home: TestePage(),
     );
   }
 }
@@ -37,57 +43,52 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                child: Container(
-                  color: Colors.red,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  color: Colors.green,
-                ),
-              ),
-            ],
-          ),
-          Center(
+      backgroundColor: Color.fromRGBO(60, 25, 79, 1),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Center(
+          child: AspectRatio(
+            aspectRatio: 8.5 / 5.4,
             child: Container(
-              width: 250,
-              height: 50,
+              width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
-                gradient: LinearGradient(
-                  end: AlignmentDirectional.topCenter,
-                  begin: AlignmentDirectional.bottomCenter,
-                  colors: [
-                    Colors.red,
-                    Colors.green,
-                  ],
-                ),
+                color: Color.fromRGBO(97, 47, 116, 1),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(25),
-                  child: Center(
-                    child: Text(
-                      'Clique Aqui',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
-                      ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    right: 10,
+                    top: 10,
+                    child: Image.asset(
+                      'assets/mastercard.png',
+                      width: 70,
                     ),
                   ),
-                ),
+                  Positioned(
+                    left: 40,
+                    top: 60,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'assets/chip.png',
+                          width: 70,
+                        ),
+                        SizedBox(width: 10),
+                        Image.asset(
+                          'assets/nfc.png',
+                          width: 30,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

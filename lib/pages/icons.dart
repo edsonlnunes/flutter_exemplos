@@ -87,7 +87,7 @@ class _IconsPageState extends State<IconsPage> {
           onTap: () {
             // _stars = _stars == i ? 0 : i; // default
 
-            _stars = i == 1 && preenchida && _stars == 1 ? 0 : i;
+            _stars = i == 1 && _stars == 1 ? 0 : i;
 
             setState(
               () {},
