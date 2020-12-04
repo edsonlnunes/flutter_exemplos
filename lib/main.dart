@@ -1,3 +1,4 @@
+import 'package:cnpj_cpf_formatter/cnpj_cpf_formatter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,60 +34,143 @@ class App extends StatelessWidget {
       ),
     );
     return MaterialApp(
-      home: TestePage(),
+      home: HomePage2(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      backgroundColor: Color.fromRGBO(60, 25, 79, 1),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Center(
-          child: AspectRatio(
-            aspectRatio: 8.5 / 5.4,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(97, 47, 116, 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    right: 10,
-                    top: 10,
-                    child: Image.asset(
-                      'assets/mastercard.png',
-                      width: 70,
-                    ),
+        padding: EdgeInsets.all(20),
+        child: Row(
+          children: [
+            Flexible(
+                child: TextField(
+              keyboardType: TextInputType.numberWithOptions(),
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var showPassword = false;
+
+  final _controller = TextEditingController();
+  final _focusNode = FocusNode();
+  final _focusNode2 = FocusNode();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        return FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              TextField(
+                autofocus: true,
+                maxLength: 30,
+                decoration: InputDecoration(
+                  labelText: 'Nome',
+                  labelStyle: TextStyle(
+                    color: Colors.red,
                   ),
-                  Positioned(
-                    left: 40,
-                    top: 60,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                  hintText: 'Digite o nome completo',
+                  hintStyle: TextStyle(
+                    color: Colors.green,
+                  ),
+                  border: OutlineInputBorder(
+                    gapPadding: 50,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  // focusedBorder: UnderlineInputBorder(),
+                  // enabledBorder: OutlineInputBorder(
+                  //   borderSide: BorderSide(
+                  //     width: 2,
+                  //     color: Colors.orange,
+                  //   ),
+                  // ),
+                  // filled: true,
+                  // fillColor: Colors.red,
+                  // counterText: 'TEsteando',
+                  // counter: Text('Limite atingido'),
+                  contentPadding: EdgeInsets.only(left: 10),
+                  // prefixIcon: Icon(Icons.person),
+                  // prefixText: 'Nome',
+                  suffixIcon: IconButton(
+                    icon: Icon(!showPassword
+                        ? Icons.visibility_off
+                        : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        showPassword = !showPassword;
+                      });
+                    },
+                  ),
+                  icon: Icon(Icons.person),
+                ),
+                cursorColor: Colors.red,
+                // cursorWidth: 10,
+                buildCounter: (ctx, {currentLength, isFocused, maxLength}) {
+                  if (isFocused) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Image.asset(
-                          'assets/chip.png',
-                          width: 70,
-                        ),
+                        Text('$currentLength / $maxLength'),
                         SizedBox(width: 10),
-                        Image.asset(
-                          'assets/nfc.png',
-                          width: 30,
-                          color: Colors.white,
-                        ),
+                        Icon(Icons.smoking_rooms),
                       ],
-                    ),
-                  )
+                    );
+                  }
+                },
+                enabled: true,
+                // maxLines: 2,
+                obscureText: false,
+                style: TextStyle(color: Colors.orange),
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  print('change $value');
+                },
+                onSubmitted: (value) {
+                  print('submitted $value');
+                },
+                onEditingComplete: () {
+                  FocusScope.of(context).unfocus();
+                  print(_controller.text);
+                  // _focusNode2.requestFocus();
+                },
+                focusNode: _focusNode,
+                controller: _controller,
+                inputFormatters: [
+                  CnpjCpfFormatter(eDocumentType: EDocumentType.BOTH),
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
               ),
-            ),
+              TextFormField(
+                focusNode: _focusNode2,
+              ),
+              FlatButton(
+                onPressed: () {},
+                child: Text('Clique aqui'),
+              ),
+              Text(_controller.text.replaceAll(RegExp(r"[^\s\w]"), '')),
+            ],
           ),
         ),
       ),

@@ -30,6 +30,9 @@ dependencies:
   cupertino_icons: ^1.0.0
   font_awesome_flutter: ^8.10.0
   flip_card: ^0.4.4
+  email_validator: ^1.0.5
+  cnpj_cpf_helper: ^1.0.8
+  cnpj_cpf_formatter: ^1.0.8
   
 dev_dependencies:
   flutter_test:
