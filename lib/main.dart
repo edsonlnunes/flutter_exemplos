@@ -1,12 +1,6 @@
-import 'package:cnpj_cpf_formatter/cnpj_cpf_formatter.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_exemplos/pages/atividades/login.dart';
-import 'package:flutter_exemplos/pages/atividades/nubank.dart';
-import 'package:flutter_exemplos/pages/icons.dart';
-import 'package:flutter_exemplos/pages/meio_a_meio.dart';
-import 'package:flutter_exemplos/pages/teste.dart';
+import './models//user.dart';
 
 /*
   Crie uma aplicação Flutter que atenda os requisitos abaixo:
@@ -19,41 +13,34 @@ import 'package:flutter_exemplos/pages/teste.dart';
 
   OBS: Use GestureDetector
 */
-
 void main() {
   runApp(App());
 }
 
 class App extends StatelessWidget {
+  final primaryColor = Colors.teal;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Colors.blue,
-        systemNavigationBarColor: Colors.blue,
+        statusBarColor: primaryColor,
+        systemNavigationBarColor: primaryColor,
       ),
     );
-    return MaterialApp(
-      home: HomePage2(),
-    );
-  }
-}
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
 
-class HomePage2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Row(
-          children: [
-            Flexible(
-                child: TextField(
-              keyboardType: TextInputType.numberWithOptions(),
-            )),
-          ],
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: MaterialApp(
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: primaryColor,
         ),
+        home: HomePage(),
       ),
     );
   }
@@ -65,115 +52,212 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var showPassword = false;
+  var valueSwitch = false;
 
-  final _controller = TextEditingController();
-  final _focusNode = FocusNode();
-  final _focusNode2 = FocusNode();
+  final _formKey = GlobalKey<FormState>();
+  var user = User();
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        return FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              TextField(
-                autofocus: true,
-                maxLength: 30,
-                decoration: InputDecoration(
-                  labelText: 'Nome',
-                  labelStyle: TextStyle(
-                    color: Colors.red,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Cadastro'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Nome',
+                        ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Campo não pode estar vazio';
+                          }
+
+                          return null;
+                        },
+                        onSaved: (value) {
+                          user.name = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Idade',
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Campo não pode estar vazio';
+                          }
+
+                          return null;
+                        },
+                        onSaved: (value) {
+                          user.age = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'E-mail',
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Campo não pode estar vazio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          user.email = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'CPF',
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Campo não pode estar vazio';
+                          }
+
+                          return null;
+                        },
+                        onSaved: (value) {
+                          user.document = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Switch(
+                            onChanged: (value) {
+                              setState(() {
+                                user.active = value;
+                              });
+                            },
+                            value: user.active,
+                            activeColor: Theme.of(context).primaryColor,
+                          ),
+                          Text(valueSwitch ? 'Ativo' : 'Desativado')
+                        ],
+                      ),
+                    ],
                   ),
-                  hintText: 'Digite o nome completo',
-                  hintStyle: TextStyle(
-                    color: Colors.green,
-                  ),
-                  border: OutlineInputBorder(
-                    gapPadding: 50,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  // focusedBorder: UnderlineInputBorder(),
-                  // enabledBorder: OutlineInputBorder(
-                  //   borderSide: BorderSide(
-                  //     width: 2,
-                  //     color: Colors.orange,
-                  //   ),
-                  // ),
-                  // filled: true,
-                  // fillColor: Colors.red,
-                  // counterText: 'TEsteando',
-                  // counter: Text('Limite atingido'),
-                  contentPadding: EdgeInsets.only(left: 10),
-                  // prefixIcon: Icon(Icons.person),
-                  // prefixText: 'Nome',
-                  suffixIcon: IconButton(
-                    icon: Icon(!showPassword
-                        ? Icons.visibility_off
-                        : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                  ),
-                  icon: Icon(Icons.person),
                 ),
-                cursorColor: Colors.red,
-                // cursorWidth: 10,
-                buildCounter: (ctx, {currentLength, isFocused, maxLength}) {
-                  if (isFocused) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('$currentLength / $maxLength'),
-                        SizedBox(width: 10),
-                        Icon(Icons.smoking_rooms),
-                      ],
-                    );
-                  }
-                },
-                enabled: true,
-                // maxLines: 2,
-                obscureText: false,
-                style: TextStyle(color: Colors.orange),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  print('change $value');
-                },
-                onSubmitted: (value) {
-                  print('submitted $value');
-                },
-                onEditingComplete: () {
-                  FocusScope.of(context).unfocus();
-                  print(_controller.text);
-                  // _focusNode2.requestFocus();
-                },
-                focusNode: _focusNode,
-                controller: _controller,
-                inputFormatters: [
-                  CnpjCpfFormatter(eDocumentType: EDocumentType.BOTH),
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
               ),
-              TextFormField(
-                focusNode: _focusNode2,
-              ),
-              FlatButton(
-                onPressed: () {},
-                child: Text('Clique aqui'),
-              ),
-              Text(_controller.text.replaceAll(RegExp(r"[^\s\w]"), '')),
-            ],
-          ),
+            ),
+            Builder(
+              builder: (ctx) {
+                return Container(
+                  width: double.infinity,
+                  child: OutlineButton(
+                    child: Text('Salvar'),
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      if (!_formKey.currentState.validate()) {
+                        // OU  if (!Form.of(ctx).validate()) {
+                        // Scaffold.of(ctx).hideCurrentSnackBar();
+                        Scaffold.of(ctx).showSnackBar(SnackBar(
+                          content: Text(
+                            'Formulário inválido',
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                          backgroundColor: Colors.red,
+                        ));
+                        return;
+                      }
+
+                      _formKey.currentState.save();
+                      this.showInformation();
+                      print('Formulario válido');
+                    },
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                );
+              },
+            )
+          ],
         ),
       ),
     );
+  }
+
+  void showInformation() async {
+    // showDialog(
+    //   context: context,
+    //   child: SimpleDialog(
+    //     title: Text('Informações do usuário'),
+    //     contentPadding: EdgeInsets.all(20),
+    //     titlePadding: EdgeInsets.all(20),
+    //     children: [
+    //       Text('Nome: ${user.name}'),
+    //       Text('Idade: ${user.age}'),
+    //       Text('Email: ${user.email}'),
+    //       Text('CPF: ${user.document}'),
+    //       Text('Está ativo?: ${user.active ? 'Sim' : 'Não'}'),
+    //     ],
+    //   ),
+    // );
+    var resultado = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      child: AlertDialog(
+        title: Text('Informações do usuário'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Tem certeza?'),
+            Text('Tem certeza mesmo?'),
+          ],
+        ),
+        actions: [
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          ),
+          FlatButton(
+            child: Text('Cancelar'),
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+          ),
+        ],
+      ),
+    );
+    print(resultado);
   }
 }
