@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_exemplos/pages/cadastro/form.page.dart';
 import './models//user.dart';
 
 /*
@@ -39,6 +40,9 @@ class App extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.light,
           primaryColor: primaryColor,
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: primaryColor,
+          ),
         ),
         home: HomePage(),
       ),
@@ -52,212 +56,112 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var valueSwitch = false;
-
-  final _formKey = GlobalKey<FormState>();
-  var user = User();
+  final users = <User>[
+    User(
+      name: 'User 1',
+      age: '21',
+      email: 'user@teste.com',
+      active: true,
+      document: '00011122233',
+    ),
+    User(
+      name: 'User 2',
+      age: '21',
+      email: 'user2@teste.com',
+      active: false,
+      document: '00011122233',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro'),
-        centerTitle: true,
+        title: Text('Lista de usuários'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Nome',
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Campo não pode estar vazio';
-                          }
-
-                          return null;
-                        },
-                        onSaved: (value) {
-                          user.name = value;
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Idade',
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Campo não pode estar vazio';
-                          }
-
-                          return null;
-                        },
-                        onSaved: (value) {
-                          user.age = value;
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'E-mail',
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Campo não pode estar vazio';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          user.email = value;
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'CPF',
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Campo não pode estar vazio';
-                          }
-
-                          return null;
-                        },
-                        onSaved: (value) {
-                          user.document = value;
-                        },
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
-                          Switch(
-                            onChanged: (value) {
-                              setState(() {
-                                user.active = value;
-                              });
-                            },
-                            value: user.active,
-                            activeColor: Theme.of(context).primaryColor,
-                          ),
-                          Text(valueSwitch ? 'Ativo' : 'Desativado')
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+      body: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        itemCount: User.users.length,
+        itemBuilder: (ctx, index) {
+          final user = User.users[index];
+          //                         Edson, 23 anos
+          // ICONE(ATIVO OU NAO)     CPF: xxxx | email: XXXXX     BOTAO PARA EDITAR
+          return ListTile(
+            leading: Icon(
+              user.active ? Icons.check_circle : Icons.highlight_off,
+              color: user.active ? Colors.green : Colors.red,
+            ),
+            isThreeLine: true,
+            title: Text(
+              '${user.name}, ${user.age} anos',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
             ),
-            Builder(
-              builder: (ctx) {
-                return Container(
-                  width: double.infinity,
-                  child: OutlineButton(
-                    child: Text('Salvar'),
-                    textColor: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      if (!_formKey.currentState.validate()) {
-                        // OU  if (!Form.of(ctx).validate()) {
-                        // Scaffold.of(ctx).hideCurrentSnackBar();
-                        Scaffold.of(ctx).showSnackBar(SnackBar(
-                          content: Text(
-                            'Formulário inválido',
-                            style: TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          backgroundColor: Colors.red,
-                        ));
-                        return;
-                      }
-
-                      _formKey.currentState.save();
-                      this.showInformation();
-                      print('Formulario válido');
-                    },
-                    borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('CPF: ${user.document}'),
+                Text('E-mail: ${user.email}'),
+              ],
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {},
+            ),
+            onTap: () {},
+            // selected: user.active,
+            enabled: user.active,
+          );
+          // return Row(
+          //   children: [
+          //     Icon(
+          //       user.active ? Icons.check_circle : Icons.highlight_off,
+          //       color: user.active ? Colors.green : Colors.red,
+          //     ),
+          //     SizedBox(
+          //       width: 20,
+          //     ),
+          //     Expanded(
+          //       child: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Text(
+          //             '${user.name}, ${user.age} anos',
+          //             style: TextStyle(
+          //               fontWeight: FontWeight.bold,
+          //               fontSize: 16,
+          //             ),
+          //           ),
+          //           Text('CPF: ${user.document} | E-mail: ${user.email}'),
+          //         ],
+          //       ),
+          //     ),
+          //     IconButton(
+          //       icon: Icon(Icons.edit),
+          //       onPressed: () {},
+          //     )
+          //   ],
+          // );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // Navigator.push(context,MaterialPageRoute(builder: (ctx) => FormPage()));
+          User user = await Navigator.of(context).push(
+            MaterialPageRoute(builder: (ctx) => FormPage()),
+            // CupertinoPageRoute(builder: (ctx) => FormPage()),
+          );
+          print(user);
+          print(user.runtimeType);
+          print(user.name);
+          setState(() {
+            users.add(user);
+          });
+        },
+        child: Icon(Icons.add),
       ),
     );
-  }
-
-  void showInformation() async {
-    // showDialog(
-    //   context: context,
-    //   child: SimpleDialog(
-    //     title: Text('Informações do usuário'),
-    //     contentPadding: EdgeInsets.all(20),
-    //     titlePadding: EdgeInsets.all(20),
-    //     children: [
-    //       Text('Nome: ${user.name}'),
-    //       Text('Idade: ${user.age}'),
-    //       Text('Email: ${user.email}'),
-    //       Text('CPF: ${user.document}'),
-    //       Text('Está ativo?: ${user.active ? 'Sim' : 'Não'}'),
-    //     ],
-    //   ),
-    // );
-    var resultado = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      child: AlertDialog(
-        title: Text('Informações do usuário'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Tem certeza?'),
-            Text('Tem certeza mesmo?'),
-          ],
-        ),
-        actions: [
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-          ),
-          FlatButton(
-            child: Text('Cancelar'),
-            onPressed: () {
-              Navigator.pop(context, false);
-            },
-          ),
-        ],
-      ),
-    );
-    print(resultado);
   }
 }
