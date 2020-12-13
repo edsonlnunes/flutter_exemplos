@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_exemplos/infra/db_sqlite.dart';
 import 'package:flutter_exemplos/models/user.dart';
-import 'package:flutter_exemplos/pages/list_view.dart';
+import 'package:flutter_exemplos/repositories/user_repository.dart';
 
 class FormPage extends StatefulWidget {
+  // final User user;
+
+  // const FormPage({this.user});
+
   @override
   _FormPageState createState() => _FormPageState();
 }
@@ -11,7 +16,20 @@ class _FormPageState extends State<FormPage> {
   var valueSwitch = false;
 
   final _formKey = GlobalKey<FormState>();
-  var user = User();
+  User user;
+  final repository = UserRepository(DBSQLite());
+
+  @override
+  void initState() {
+    super.initState();
+    // user = widget?.user ?? User();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    user = (ModalRoute.of(context).settings?.arguments as User) ?? User();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +51,7 @@ class _FormPageState extends State<FormPage> {
                   child: Column(
                     children: [
                       TextFormField(
+                        initialValue: user?.name,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Nome',
@@ -53,6 +72,7 @@ class _FormPageState extends State<FormPage> {
                         height: 20,
                       ),
                       TextFormField(
+                        initialValue: user?.age?.toString() ?? '',
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Idade',
@@ -66,13 +86,14 @@ class _FormPageState extends State<FormPage> {
                           return null;
                         },
                         onSaved: (value) {
-                          user.age = value;
+                          user.age = int.tryParse(value);
                         },
                       ),
                       SizedBox(
                         height: 20,
                       ),
                       TextFormField(
+                        initialValue: user?.email,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'E-mail',
@@ -92,6 +113,7 @@ class _FormPageState extends State<FormPage> {
                         height: 20,
                       ),
                       TextFormField(
+                        initialValue: user?.document,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'CPF',
@@ -137,7 +159,7 @@ class _FormPageState extends State<FormPage> {
                   child: OutlineButton(
                     child: Text('Salvar'),
                     textColor: Theme.of(context).primaryColor,
-                    onPressed: () {
+                    onPressed: () async {
                       if (!_formKey.currentState.validate()) {
                         // OU  if (!Form.of(ctx).validate()) {
                         // Scaffold.of(ctx).hideCurrentSnackBar();
@@ -154,10 +176,29 @@ class _FormPageState extends State<FormPage> {
                       }
 
                       _formKey.currentState.save();
+
+                      if (user.id != null) {
+                        var updated = await repository.updateUser(user);
+
+                        if (!updated) {
+                          Scaffold.of(ctx).showSnackBar(SnackBar(
+                            content: Text(
+                              'Não atualizou',
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                            backgroundColor: Colors.red,
+                          ));
+                          return;
+                        }
+                      } else {
+                        user.id = await repository.saveUser(user);
+                      }
+
                       // this.showInformation();
                       // await controller.salvarNoBanco();
                       Navigator.of(context).pop(user);
-                      print('Formulario válido');
                     },
                     borderSide: BorderSide(
                       color: Theme.of(context).primaryColor,
@@ -216,6 +257,5 @@ class _FormPageState extends State<FormPage> {
         ],
       ),
     );
-    print(resultado);
   }
 }
