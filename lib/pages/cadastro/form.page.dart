@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_exemplos/infra/db_sqlite.dart';
 import 'package:flutter_exemplos/models/user.dart';
 import 'package:flutter_exemplos/repositories/user_repository.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FormPage extends StatefulWidget {
   // final User user;
@@ -18,6 +22,7 @@ class _FormPageState extends State<FormPage> {
   final _formKey = GlobalKey<FormState>();
   User user;
   final repository = UserRepository(DBSQLite());
+  File file;
 
   @override
   void initState() {
@@ -50,6 +55,73 @@ class _FormPageState extends State<FormPage> {
                   key: _formKey,
                   child: Column(
                     children: [
+                      // Container(
+                      //   padding: EdgeInsets.all(10),
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: BorderRadius.circular(100),
+                      //     color: Colors.teal.withOpacity(.2),
+                      //   ),
+                      //   child: CircleAvatar(
+                      //     radius: 80,
+                      //   ),
+                      // ),
+
+                      CircleAvatar(
+                        radius: 90,
+                        backgroundColor: Colors.teal.withOpacity(.2),
+                        child: GestureDetector(
+                          onTap: () async {
+                            var source = await showDialog<ImageSource>(
+                              context: context,
+                              barrierDismissible: false,
+                              child: AlertDialog(
+                                title: Text('Escolha uma opção'),
+                                actions: [
+                                  FlatButton(
+                                    child: Text('Galeria'),
+                                    onPressed: () {
+                                      Navigator.pop(
+                                          context, ImageSource.gallery);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text('Camera'),
+                                    onPressed: () {
+                                      Navigator.pop(
+                                          context, ImageSource.camera);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+
+                            var picker = ImagePicker();
+                            var pickedFile =
+                                await picker.getImage(source: source);
+
+                            if (pickedFile != null) {
+                              setState(() {
+                                user.image = File(pickedFile.path);
+                                file = File(pickedFile.path);
+                              });
+                            }
+                          },
+                          child: Hero(
+                            tag: user?.id?.toString() ?? '',
+                            // tag:user.endereco != null && user.endereco.cep != null ? user.endereco.cep.toUpperCase() : user.endereco != null ? '': '' ,
+                            child: CircleAvatar(
+                              radius: 80,
+                              backgroundImage: user.image != null
+                                  ? FileImage(user.image)
+                                  : AssetImage('assets/goku.jpg'),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 30,
+                      ),
                       TextFormField(
                         initialValue: user?.name,
                         decoration: InputDecoration(

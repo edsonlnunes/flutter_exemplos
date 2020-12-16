@@ -34,7 +34,8 @@ class DBSQLite {
             age INTEGER,
             document TEXT,
             email TEXT,
-            active INTEGER
+            active INTEGER,
+            image TEXT
           );
 
           CREATE TABLE address(

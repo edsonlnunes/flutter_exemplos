@@ -67,9 +67,13 @@ class _ListUsersPageState extends State<ListUsersPage> {
                     });
                   }
                 },
-                leading: Icon(
-                  user.active ? Icons.check_circle : Icons.highlight_off,
-                  color: user.active ? Colors.green : Colors.red,
+                leading: Hero(
+                  tag: user.id.toString(),
+                  child: CircleAvatar(
+                    backgroundImage: user.image != null
+                        ? FileImage(user.image)
+                        : AssetImage('assets/goku.jpg'),
+                  ),
                 ),
                 isThreeLine: true,
                 title: Text(
@@ -86,9 +90,9 @@ class _ListUsersPageState extends State<ListUsersPage> {
                     Text('E-mail: ${user.email}'),
                   ],
                 ),
-                trailing: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {},
+                trailing: Icon(
+                  user.active ? Icons.check_circle : Icons.highlight_off,
+                  color: user.active ? Colors.green : Colors.red,
                 ),
                 onTap: () async {
                   var userUpdated = await Navigator.of(context)

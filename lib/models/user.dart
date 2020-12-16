@@ -1,3 +1,9 @@
+import 'dart:io';
+
+class Endereco {
+  String cep;
+}
+
 class User {
   int id;
   String name;
@@ -5,6 +11,8 @@ class User {
   String email;
   String document;
   bool active;
+  File image;
+  Endereco endereco;
 
   User({
     this.name,
@@ -22,6 +30,7 @@ class User {
     this.document = value['document'];
     this.active = (value['active'] as int) == 1;
     this.id = value['id'];
+    this.image = value['image'] != null ? File(value['image']) : null;
   }
 
   Map<String, dynamic> toDB() {
@@ -31,6 +40,7 @@ class User {
       'document': this.document,
       'age': this.age,
       'active': this.active ? 1 : 0,
+      'image': this.image?.path,
     };
     return map;
   }
