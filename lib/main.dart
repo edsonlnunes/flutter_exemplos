@@ -12,12 +12,12 @@ class App extends StatelessWidget {
   final primaryColor = Colors.teal;
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: primaryColor,
-        systemNavigationBarColor: primaryColor,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle(
+    //     statusBarColor: primaryColor,
+    //     systemNavigationBarColor: primaryColor,
+    //   ),
+    // );
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);

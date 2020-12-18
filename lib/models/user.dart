@@ -1,9 +1,5 @@
 import 'dart:io';
 
-class Endereco {
-  String cep;
-}
-
 class User {
   int id;
   String name;
@@ -12,7 +8,6 @@ class User {
   String document;
   bool active;
   File image;
-  Endereco endereco;
 
   User({
     this.name,
