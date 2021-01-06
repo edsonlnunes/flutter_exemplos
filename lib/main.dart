@@ -9,6 +9,8 @@ void main() {
 }
 
 // feature nova
+
+// minha nova feature
 class App extends StatelessWidget {
   final primaryColor = Colors.teal;
   @override
