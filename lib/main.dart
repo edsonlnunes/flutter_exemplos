@@ -9,7 +9,7 @@ void main() {
 }
 
 // feature nova
-
+// qualquer alteração
 // alteracao realizada
 class App extends StatelessWidget {
   final primaryColor = Colors.teal;
