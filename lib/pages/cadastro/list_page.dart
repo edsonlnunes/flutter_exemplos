@@ -65,15 +65,38 @@ class _ListUsersPageState extends State<ListUsersPage> {
             //     ),
             //   ],
             // ),
-            Container(
-              height: 200,
-              color: Colors.teal,
+            // Container(
+            //   height: 200,
+            //   color: Colors.teal,
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       CircleAvatar(
+            //         backgroundImage: AssetImage('assets/goku.jpg'),
+            //         radius: 50,
+            //       ),
+            //       SizedBox(
+            //         height: 10,
+            //       ),
+            //       Text(
+            //         'Edson Martins',
+            //         style: TextStyle(color: Colors.white),
+            //       ),
+            //       Text('edson@growde.com',
+            //           style: TextStyle(color: Colors.white)),
+            //     ],
+            //   ),
+            // ),
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.teal,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
                     backgroundImage: AssetImage('assets/goku.jpg'),
-                    radius: 50,
+                    radius: 30,
                   ),
                   SizedBox(
                     height: 10,
@@ -82,8 +105,10 @@ class _ListUsersPageState extends State<ListUsersPage> {
                     'Edson Martins',
                     style: TextStyle(color: Colors.white),
                   ),
-                  Text('edson@growde.com',
-                      style: TextStyle(color: Colors.white)),
+                  Text(
+                    'edson@growde.com',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
             ),
